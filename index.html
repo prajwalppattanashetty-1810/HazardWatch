@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HazardWatch | India Red Zone Intelligence</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <!-- Our CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                HW
+            </div>
+
+            <div>
+                <h2>HazardWatch</h2>
+                <span>Red Zone Intelligence</span>
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <button
+                class="nav-btn active"
+                onclick="showPage('dashboard', this)">
+                🏠 Dashboard
+            </button>
+
+            <button
+                class="nav-btn"
+                onclick="showPage('map', this)">
+                🗺️ Hazard Map
+            </button>
+
+            <button
+                class="nav-btn"
+                onclick="showPage('risk', this)">
+                📊 Risk Analysis
+            </button>
+
+            <button
+                class="nav-btn"
+                onclick="showPage('relocation', this)">
+                🚨 Relocation
+            </button>
+
+            <button
+                class="nav-btn"
+                onclick="showPage('reports', this)">
+                📄 Reports
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <p>SIH 2026 Prototype</p>
+            <span>India-wide Disaster Intelligence</span>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main-content">
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section id="dashboard" class="page active">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>India Hazard Dashboard</h1>
+
+                    <p>
+                        Monitor hazard exposure, population vulnerability
+                        and relocation requirements across India.
+                    </p>
+                </div>
+
+                <div class="status">
+                    ● System Online
+                </div>
+
+            </div>
+
+
+            <!-- STAT CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon red">
+                        ⚠️
+                    </div>
+
+                    <div>
+                        <span>Very High Risk</span>
+                        <strong id="veryHighCount">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon orange">
+                        🔶
+                    </div>
+
+                    <div>
+                        <span>High Risk</span>
+                        <strong id="highCount">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon yellow">
+                        🟡
+                    </div>
+
+                    <div>
+                        <span>Medium Risk</span>
+                        <strong id="mediumCount">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon green">
+                        🟢
+                    </div>
+
+                    <div>
+                        <span>Low Risk</span>
+                        <strong id="lowCount">0</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DASHBOARD GRID -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- RISK DISTRIBUTION -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h2>Risk Distribution</h2>
+
+                        <span>Demo Dataset</span>
+
+                    </div>
+
+
+                    <div class="risk-bar-container">
+
+                        <div class="risk-label">
+                            <span>Very High</span>
+                            <b id="veryHighPercent">0%</b>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                id="veryHighBar"
+                                class="progress-red">
+                            </div>
+                        </div>
+
+
+                        <div class="risk-label">
+                            <span>High</span>
+                            <b id="highPercent">0%</b>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                id="highBar"
+                                class="progress-orange">
+                            </div>
+                        </div>
+
+
+                        <div class="risk-label">
+                            <span>Medium</span>
+                            <b id="mediumPercent">0%</b>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                id="mediumBar"
+                                class="progress-yellow">
+                            </div>
+                        </div>
+
+
+                        <div class="risk-label">
+                            <span>Low</span>
+                            <b id="lowPercent">0%</b>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                id="lowBar"
+                                class="progress-green">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QUICK INFO -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h2>System Overview</h2>
+
+                    </div>
+
+
+                    <div class="overview-item">
+
+                        <span>Locations Analysed</span>
+
+                        <strong id="locationCount">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="overview-item">
+
+                        <span>Total Population</span>
+
+                        <strong id="populationCount">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="overview-item">
+
+                        <span>Vulnerable Population</span>
+
+                        <strong id="vulnerableCount">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="overview-item">
+
+                        <span>Relocation Required</span>
+
+                        <strong id="relocationCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ALERTS -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h2>Recent Alerts</h2>
+
+                    <button
+                        onclick="showPage('map')"
+                        class="small-btn">
+                        View Map
+                    </button>
+
+                </div>
+
+                <div id="alertsContainer"></div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= MAP ================= -->
+
+        <section id="map" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>🇮🇳 India Hazard Intelligence Map</h1>
+
+                    <p>
+                        Interactive hazard-based risk visualization
+                        across India.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MAP FILTERS -->
+
+            <div class="map-controls">
+
+                <div>
+
+                    <label for="stateFilter">
+                        State
+                    </label>
+
+                    <select id="stateFilter">
+
+                        <option value="ALL">
+                            All India
+                        </option>
+
+                        <option value="Karnataka">
+                            Karnataka
+                        </option>
+
+                        <option value="Kerala">
+                            Kerala
+                        </option>
+
+                        <option value="Tamil Nadu">
+                            Tamil Nadu
+                        </option>
+
+                        <option value="Maharashtra">
+                            Maharashtra
+                        </option>
+
+                        <option value="Uttarakhand">
+                            Uttarakhand
+                        </option>
+
+                        <option value="Himachal Pradesh">
+                            Himachal Pradesh
+                        </option>
+
+                        <option value="Assam">
+                            Assam
+                        </option>
+
+                        <option value="Odisha">
+                            Odisha
+                        </option>
+
+                        <option value="West Bengal">
+                            West Bengal
+                        </option>
+
+                        <option value="Bihar">
+                            Bihar
+                        </option>
+
+                        <option value="Gujarat">
+                            Gujarat
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div>
+
+                    <label for="riskFilter">
+                        Risk Level
+                    </label>
+
+                    <select id="riskFilter">
+
+                        <option value="ALL">
+                            All Risk Levels
+                        </option>
+
+                        <option value="VERY HIGH">
+                            Very High
+                        </option>
+
+                        <option value="HIGH">
+                            High
+                        </option>
+
+                        <option value="MEDIUM">
+                            Medium
+                        </option>
+
+                        <option value="LOW">
+                            Low
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MAP -->
+
+            <div class="map-layout">
+
+                <div id="hazardMap"></div>
+
+
+                <!-- MAP SIDE PANEL -->
+
+                <div class="map-panel">
+
+                    <h2>Risk Legend</h2>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot very-high"></span>
+
+                        <span>
+                            Very High Risk
+                        </span>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot high"></span>
+
+                        <span>
+                            High Risk
+                        </span>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot medium"></span>
+
+                        <span>
+                            Medium Risk
+                        </span>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot low"></span>
+
+                        <span>
+                            Low Risk
+                        </span>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <div id="locationDetails">
+
+                        <h3>Select a location</h3>
+
+                        <p>
+                            Click a hazard marker to
+                            see detailed information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= RISK ANALYSIS ================= -->
+
+        <section id="risk" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Risk Analysis</h1>
+
+                    <p>
+                        Calculate hazard and population risk.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="analysis-card">
+
+                <form id="riskForm">
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Village / Location
+                            </label>
+
+                            <input
+                                id="locationName"
+                                type="text"
+                                placeholder="Example: Village ABC"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Population
+                            </label>
+
+                            <input
+                                id="population"
+                                type="number"
+                                min="0"
+                                placeholder="Enter population"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Safe Carrying Capacity
+                            </label>
+
+                            <input
+                                id="capacity"
+                                type="number"
+                                min="1"
+                                placeholder="Enter capacity"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Hazard Level
+                            </label>
+
+                            <select id="hazardLevel">
+
+                                <option value="1">
+                                    Low
+                                </option>
+
+                                <option value="2">
+                                    Medium
+                                </option>
+
+                                <option value="3">
+                                    High
+                                </option>
+
+                                <option value="4">
+                                    Very High
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Vulnerability Level
+                            </label>
+
+                            <select id="vulnerability">
+
+                                <option value="1">
+                                    Low
+                                </option>
+
+                                <option value="2">
+                                    Medium
+                                </option>
+
+                                <option value="3">
+                                    High
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="primary-btn">
+
+                        Calculate Risk
+
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="riskResult"
+                    class="risk-result">
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= RELOCATION ================= -->
+
+        <section id="relocation" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Relocation Priority</h1>
+
+                    <p>
+                        Locations where population exceeds
+                        safe carrying capacity.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card table-card">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Location</th>
+
+                                <th>State</th>
+
+                                <th>Population</th>
+
+                                <th>Risk</th>
+
+                                <th>Capacity</th>
+
+                                <th>Relocate</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="relocationTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= REPORTS ================= -->
+
+        <section id="reports" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Reports</h1>
+
+                    <p>
+                        Generate a summary of the hazard analysis.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="report-card">
+
+                <div class="report-icon">
+                    📄
+                </div>
+
+                <h2>India Hazard Assessment Report</h2>
+
+                <p>
+                    Generate a printable report containing
+                    risk distribution, population exposure,
+                    vulnerable population and relocation
+                    requirements.
+                </p>
+
+                <button
+                    onclick="generateReport()"
+                    class="primary-btn">
+
+                    Generate Report
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- Leaflet JS -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+
+    <!-- Our JavaScript -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
